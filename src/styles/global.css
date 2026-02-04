@@ -63,3 +63,22 @@
 .prose pre {
   @apply m-0! bg-transparent p-4 text-sm leading-relaxed;
 }
+
+.icon-desktop {
+  display: none;
+}
+
+.icon-mobile {
+  display: inline-block;
+}
+
+/* Desktop: 768px+ shows right arrow, hides down arrow */
+@media screen and (min-width: 768px) {
+  .icon-desktop {
+    display: inline-block;
+  }
+  
+  .icon-mobile {
+    display: none;
+  }
+}

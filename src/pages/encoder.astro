@@ -144,10 +144,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     function toggleShareButton() {
-      const hasMdContent = mdInput.value.trim().length > 0;
+      // Only enable if Base64URL input has content
       const hasB64Content = b64Input.value.trim().length > 0;
       
-      if (hasMdContent || hasB64Content) {
+      if (hasB64Content) {
         btnShare.disabled = false;
         btnShare.className = "w-full py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all flex items-center justify-center gap-2";
       } else {

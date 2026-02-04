@@ -9,3 +9,8 @@ feat: add custom CSS responsive button component with mobile/desktop icons
 - Maintains original button styling and hover effects
 
 ---
+
+fix: only show get shareable url if base64url textarea is not empty
+
+---
+

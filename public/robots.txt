@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Host
+Host: https://rafifmsn.com
+
+# Sitemaps
+Sitemap: https://rafifmsn.com/sitemap-index.xml

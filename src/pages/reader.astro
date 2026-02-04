@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout pageTitle="Reader">
+
+  <script is:inline src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <div class="max-w-2xl mx-auto">
+    <article id="dynamic-content" class="prose prose-invert prose-neutral max-w-none">
+      <div class="animate-pulse flex space-x-4 mt-10">
+        <div class="flex-1 space-y-4 py-1">
+          <div class="h-4 bg-neutral-800 rounded w-3/4"></div>
+          <div class="h-4 bg-neutral-800 rounded"></div>
+          <div class="h-4 bg-neutral-800 rounded w-5/6"></div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <script is:inline>
+    function base64UrlDecode(str) {
+      // Remove the '#' character if it's still at the start
+      const cleanStr = str.startsWith('#') ? str.substring(1) : str;
+      if (!cleanStr) return null;
+
+      const normalized = cleanStr.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = normalized.padEnd(normalized.length + (4 - normalized.length % 4) % 4, '=');
+      
+      const binaryString = atob(padded);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      return new TextDecoder().decode(bytes);
+    }
+
+    const contentDiv = document.getElementById('dynamic-content');
+    
+    // Retrieve data from the fragment identifier (hash)
+    const hashData = window.location.hash;
+
+    const defaultText = `
+## Welcome to Reader
+This content is generated dynamically from the URL.
+
+You can encode your own markdown at [/encoder](/encoder).
+
+The list of full features can be seen at [/usage](/usage).
+    `;
+
+    try {
+      const markdown = hashData ? base64UrlDecode(hashData) : defaultText;
+      contentDiv.innerHTML = marked.parse(markdown);
+
+      renderMathInElement(contentDiv, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false},
+        ],
+      });
+    } catch (e) {
+      contentDiv.innerHTML = `<div class="p-4 border border-red-900 bg-red-900/20 text-red-200 rounded-lg">Error decoding content: ${e.message}</div>`;
+    }
+  </script>

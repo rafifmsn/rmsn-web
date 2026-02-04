@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Get all posts and sort by date
+const posts = (await getCollection('writings')).sort(
+	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+);
+---
+
+<BaseLayout pageTitle="Writings">
+  <div class="-mt-8 space-y-10">
+    <div class="grid gap-4">
+      {posts.map((post) => (
+        <a href={`/writings/${post.slug}`} class="group block">
+          <article class="flex flex-col space-y-2">
+            <div class="flex-row lg:flex justify-between items-baseline">
+              <h2 class="text-xl font-semibold text-neutral-200 group-hover:text-white group-hover:underline decoration-2 underline-offset-4 transition-all">
+                {post.data.title}
+              </h2>
+              <time class="font-mono text-xs text-neutral-500 shrink-0 lg:ml-4">
+                {post.data.date}
+              </time>
+            </div>
+            {post.data.summary && (
+              <p class="text-neutral-400 text-sm leading-relaxed max-w-2xl">
+                {post.data.summary}
+              </p>
+            )}
+          </article>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  /* Fonts - matches your Google Fonts import */
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular;
+
+  /* Custom Colors & Spacing if needed */
+  --color-brand-dark: #0a0a0a;
+}
+
+/* Add the Typography plugin (Prose) */
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  /* Smaller base text for the whole site */
+  html {
+    font-size: 15px; 
+  }
+
+  body {
+    @apply bg-brand-dark text-[#ededed] font-sans antialiased;
+  }
+  
+  /* Compact Headings */
+  h1 { @apply text-2xl font-bold tracking-tight mb-4; }
+  h2 { @apply text-xl font-semibold tracking-tight mt-8 mb-3; }
+  h3 { @apply text-lg font-semibold mb-2; }
+}
+
+@layer components {
+  /* Target the Markdown content specifically */
+  .prose :where(code):not(:where(pre *, [class~="not-prose"] *)) {
+    @apply text-[13px] bg-neutral-900 px-1.5 py-0.5 mx-1 rounded border border-neutral-800 text-neutral-200;
+  }
+
+  /* Make code blocks text smaller */
+  .prose pre code {
+    @apply bg-transparent border-none p-0 text-inherit;
+  }
+  
+  /* 4. Ensure the pre block itself is clean */
+  .prose pre {
+    @apply bg-transparent! m-0! text-[13px] leading-relaxed;
+  }
+  
+  /* Make inline code text smaller */
+  .prose :where(code):not(:where([class~="not-prose"] *)) {
+    @apply text-[13px] bg-neutral-900 px-1 py-0.5 rounded border border-neutral-800;
+  }
+
+  /* Remove backticks */
+  .prose :where(code):not(:where([class~="not-prose"] *))::before,
+  .prose :where(code):not(:where([class~="not-prose"] *))::after {
+    content: "" !important;
+  }
+}
+
+.katex-display {
+  @apply my-8 overflow-x-auto overflow-y-hidden py-4;
+}
+
+.prose pre {
+  @apply m-0! bg-transparent p-4 text-sm leading-relaxed;
+}

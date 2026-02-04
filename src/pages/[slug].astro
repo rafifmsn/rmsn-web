@@ -1,0 +1,29 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('pages');
+  return blogEntries.map((entry: CollectionEntry<"pages">) => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<"pages"> };
+const { Content } = await entry.render();
+---
+
+<BaseLayout pageTitle={entry.data.title} pageDescription={entry.data.description}>
+  <article class="prose prose-invert prose-neutral max-w-none">
+    <header class="mb-12 border-b border-neutral-800 pb-8">
+      <h1 class="text-2xl font-bold text-white mb-2">{entry.data.title}</h1>
+      {entry.data.description && (
+        <p class="text-neutral-500 text-base mt-4 italic">
+          {entry.data.description}
+        </p>
+      )}
+    </header>
+    
+    <Content />
+  </article>
+</BaseLayout>

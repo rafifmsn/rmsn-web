@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout pageTitle="Markdown Encoder & Decoder">
+  <div class="max-w-5xl mx-auto space-y-6 px-2">
+    
+    <div class="grid md:grid-cols-2 gap-4 h-auto md:h-[60vh]">
+      <div class="flex flex-col h-full min-h-75">
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-[10px] font-mono tracking-widest text-neutral-500 uppercase">Markdown Content</label>
+          <div class="flex gap-3">
+             <button id="copy-md" class="text-[10px] font-mono text-neutral-400 hover:text-white uppercase transition-colors">Copy</button>
+             <button id="clear-md" class="text-[10px] font-mono text-red-500/70 hover:text-red-400 uppercase transition-colors">Clear</button>
+          </div>
+        </div>
+        <textarea 
+          id="md-input" 
+          class="flex-1 w-full bg-[#111] border border-neutral-800 rounded-xl p-4 font-mono text-sm resize-none focus:outline-none focus:border-neutral-600 transition-colors placeholder:text-neutral-700"
+          placeholder="# Enter Markdown here..."
+        ></textarea>
+        <div class="mt-2 text-[10px] font-mono text-neutral-600" id="md-counter">Length: 0</div>
+      </div>
+
+      <div class="flex flex-col h-full min-h-75">
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-[10px] font-mono tracking-widest text-neutral-500 uppercase">Base64URL String</label>
+          <div class="flex gap-3">
+             <button id="copy-b64" class="text-[10px] font-mono text-neutral-400 hover:text-white uppercase transition-colors">Copy</button>
+             <button id="clear-b64" class="text-[10px] font-mono text-red-500/70 hover:text-red-400 uppercase transition-colors">Clear</button>
+          </div>
+        </div>
+        <textarea 
+          id="b64-input" 
+          class="flex-1 w-full bg-[#0d0d0d] border border-neutral-800 rounded-xl p-4 font-mono text-[11px] text-neutral-400 resize-none focus:outline-none focus:border-neutral-600 transition-colors placeholder:text-neutral-700"
+          placeholder="Paste Base64URL string here..."
+        ></textarea>
+        <div class="mt-2 flex justify-between items-center">
+            <div class="text-[10px] font-mono text-neutral-600" id="b64-counter">Length: 0</div>
+            <div id="url-alert" class="text-[10px] font-mono hidden italic"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-neutral-800">
+      <button id="btn-encode" class="w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-neutral-200 transition-all flex items-center justify-center gap-2">
+        Encode <i class="iconoir-arrow-right text-sm hidden md:block"></i><i class="iconoir-arrow-down text-sm md:hidden"></i>
+      </button>
+      <button id="btn-decode" class="w-full py-3 bg-[#1a1a1a] text-white border border-neutral-800 font-bold rounded-xl hover:bg-[#222] transition-all flex items-center justify-center gap-2">
+        <i class="iconoir-arrow-left text-sm hidden md:block"></i><i class="iconoir-arrow-up text-sm md:hidden"></i> Decode
+      </button>
+      <button id="btn-share" class="w-full py-3 bg-gray-600/50 text-gray-400 border border-neutral-700 font-bold rounded-xl cursor-not-allowed flex items-center justify-center gap-2 disabled:pointer-events-none" disabled>
+        <i class="iconoir-share-ios text-sm"></i> Get Shareable URL
+      </button>
+
+    </div>
+  </div>
+
+  <script is:inline>
+    const mdInput = document.getElementById('md-input');
+    const b64Input = document.getElementById('b64-input');
+    const mdCounter = document.getElementById('md-counter');
+    const b64Counter = document.getElementById('b64-counter');
+    const urlAlert = document.getElementById('url-alert');
+    const btnShare = document.getElementById('btn-share');
+
+    // Industry Standard URL Limit (~2000 chars total)
+    const MAX_URL_LENGTH = 2000;
+
+    function toBase64Url(str) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str);
+      const binaryString = String.fromCharCode(...data);
+      return btoa(binaryString)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    }
+
+    function fromBase64Url(str) {
+      str = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (str.length % 4) str += '=';
+      const binaryString = atob(str);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const decoder = new TextDecoder();
+      return decoder.decode(bytes);
+    }
+
+    function updateCounters() {
+      const mdLen = mdInput.value.length;
+      const b64Len = b64Input.value.length;
+      mdCounter.textContent = `Length: ${mdLen}`;
+      b64Counter.textContent = `Length: ${b64Len}`;
+
+      // Check URL safety
+      const fullUrlLen = window.location.origin.length + 11 + b64Len; // origin + /reader/?data= + string
+      if (b64Len > 0) {
+        urlAlert.classList.remove('hidden');
+        if (fullUrlLen > MAX_URL_LENGTH) {
+            urlAlert.textContent = `⚠️ URL exceeds safe limit (${fullUrlLen}/${MAX_URL_LENGTH})`;
+            urlAlert.className = "text-[10px] font-mono italic text-red-500";
+        } else {
+            urlAlert.textContent = `✓ URL is safe (${fullUrlLen}/${MAX_URL_LENGTH})`;
+            urlAlert.className = "text-[10px] font-mono italic text-green-500/60";
+        }
+      } else {
+        urlAlert.classList.add('hidden');
+      }
+
+      toggleShareButton();
+    }
+
+    // Event Listeners
+    document.getElementById('btn-encode').addEventListener('click', () => {
+      if (!mdInput.value) return;
+      b64Input.value = toBase64Url(mdInput.value);
+      updateCounters();
+    });
+
+    document.getElementById('btn-decode').addEventListener('click', () => {
+      if (!b64Input.value) return;
+      try {
+        mdInput.value = fromBase64Url(b64Input.value);
+        updateCounters();
+      } catch(e) { alert('Invalid Base64 string'); }
+    });
+
+    document.getElementById('clear-md').addEventListener('click', () => { mdInput.value = ''; updateCounters(); });
+    document.getElementById('clear-b64').addEventListener('click', () => { b64Input.value = ''; updateCounters(); });
+    
+    document.getElementById('copy-md').addEventListener('click', () => {
+        navigator.clipboard.writeText(mdInput.value);
+        document.getElementById('copy-md').textContent = 'Copied!';
+        setTimeout(() => document.getElementById('copy-md').textContent = 'Copy', 2000);
+    });
+
+    document.getElementById('copy-b64').addEventListener('click', () => {
+        navigator.clipboard.writeText(b64Input.value);
+        document.getElementById('copy-b64').textContent = 'Copied!';
+        setTimeout(() => document.getElementById('copy-b64').textContent = 'Copy', 2000);
+    });
+
+    function toggleShareButton() {
+      const hasMdContent = mdInput.value.trim().length > 0;
+      const hasB64Content = b64Input.value.trim().length > 0;
+      
+      if (hasMdContent || hasB64Content) {
+        btnShare.disabled = false;
+        btnShare.className = "w-full py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all flex items-center justify-center gap-2";
+      } else {
+        btnShare.disabled = true;
+        btnShare.className = "w-full py-3 bg-gray-600/50 text-gray-400 border border-neutral-700 font-bold rounded-xl cursor-not-allowed flex items-center justify-center gap-2 disabled:pointer-events-none";
+      }
+    }
+
+    btnShare.addEventListener('click', () => {
+        if (!b64Input.value) return;
+        // Updated to use the hash format
+        const url = `${window.location.origin}/reader#${b64Input.value}`;
+        navigator.clipboard.writeText(url);
+        
+        const originalText = btnShare.innerHTML;
+        btnShare.innerHTML = '<i class="iconoir-check text-sm"></i> URL Copied!';
+        setTimeout(() => btnShare.innerHTML = originalText, 2000);
+    });
+
+    [mdInput, b64Input].forEach(el => 
+      el.addEventListener('input', () => {
+        updateCounters();
+      })
+    );
+
+    toggleShareButton();
+  </script>
+</BaseLayout>

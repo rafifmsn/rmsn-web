@@ -9,7 +9,7 @@ const sortedPosts = allPosts.sort((a: CollectionEntry<'writings'>, b: Collection
 ---
 
 <BaseLayout pageTitle="Rafif Muchsin">
-  <div class="-mt-8 space-y-10">
+  <div class="space-y-12">
     {sortedPosts.map((post: CollectionEntry<'writings'>) => (
       <a href={`/writings/${post.slug}`} class="block group">
         <h2 class="text-xl font-semibold text-neutral-200 group-hover:text-white group-hover:underline decoration-2 underline-offset-4 transition-all">

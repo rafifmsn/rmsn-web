@@ -1,66 +1,66 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
-  /* Fonts - matches your Google Fonts import */
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui;
+  --font-sans: "Inter", ui-sans-serif, system-ui;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular;
-
-  /* Custom Colors & Spacing if needed */
   --color-brand-dark: #0a0a0a;
   --color-brand-border: #242424;
 }
 
-/* Add the Typography plugin (Prose) */
-@plugin "@tailwindcss/typography";
-
-@layer base {
-  /* Smaller base text for the whole site */
-  html {
-    font-size: 15px; 
-  }
-
-  body {
-    @apply bg-brand-dark text-[#ededed] font-sans antialiased;
+@layer base {  
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
   }
   
-  /* Compact Headings */
-  h1 { @apply text-2xl font-bold tracking-tight mb-4; }
-  h2 { @apply text-xl font-semibold tracking-tight mt-8 mb-3; }
-  h3 { @apply text-lg font-semibold mb-2; }
+  ::-webkit-scrollbar-track {
+    background: #111111;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-brand-border);
+    border-radius: 10px;
+    border: 2px solid #111111;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #404040;
+  }
+  
+  html {
+    font-size: 14px;
+    font-family: var(--font-sans);
+    -webkit-antialiased: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  .lock-screen {
+    overflow: hidden !important;
+    height: 100% !important;
+    position: fixed !important; /* The 'nuclear option' for iOS */
+    width: 100% !important;
+  }
 }
 
-@layer components {
-  /* Target the Markdown content specifically */
+@layer components {  
+  .embed-standard {
+    @apply w-full h-150 overflow-auto;
+  }
+
+  .embed-video {
+    @apply w-full h-[50vw] max-h-100;
+  }
+  
   .prose :where(code):not(:where(pre *, [class~="not-prose"] *)) {
-    @apply text-[13px] bg-neutral-900 px-1.5 py-0.5 mx-1 rounded border border-neutral-800 text-neutral-200;
-  }
-
-  /* Make code blocks text smaller */
-  .prose pre code {
-    @apply bg-transparent border-none p-0 text-inherit;
+    @apply text-[13px] bg-neutral-900 px-1.5 py-0.5 mx-1 rounded 
+           border border-brand-border text-neutral-200;
   }
   
-  /* 4. Ensure the pre block itself is clean */
-  .prose pre {
-    @apply bg-transparent! m-0! text-[13px] leading-relaxed;
-  }
-  
-  /* Make inline code text smaller */
-  .prose :where(code):not(:where([class~="not-prose"] *)) {
-    @apply text-[13px] bg-neutral-900 px-1 py-0.5 rounded border border-neutral-800;
-  }
-
-  /* Remove backticks */
   .prose :where(code):not(:where([class~="not-prose"] *))::before,
   .prose :where(code):not(:where([class~="not-prose"] *))::after {
     content: "" !important;
   }
-}
-
-.katex-display {
-  @apply my-8 overflow-x-auto overflow-y-hidden py-4;
-}
-
-.prose pre {
-  @apply m-0! bg-transparent p-4 text-sm leading-relaxed;
 }

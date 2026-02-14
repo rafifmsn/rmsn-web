@@ -2,36 +2,37 @@
   const codeBlocks = document.querySelectorAll('pre');
 
   codeBlocks.forEach((pre) => {
-    // 1. Create wrapper
     const wrapper = document.createElement('div');
-    // Updated: using brand colors and relative positioning
     wrapper.className = 'relative my-8 rounded-lg border border-brand-border bg-[#111] overflow-hidden group';
     
-    // 2. Create Header
     const header = document.createElement('div');
-    // Updated: border-brand-border
     header.className = 'flex items-center justify-between border-b border-brand-border bg-[#1a1a1a] px-4 py-2';
     
     const lang = pre.getAttribute('data-language') || '';
-    const displayLang = lang === 'plaintext' ? '' : lang;
+
+    // Logic: If it's plaintext or empty, it's a generic block. Hide the label.
+    const isPlaintext = lang === 'plaintext' || lang === '';
+    const displayLang = isPlaintext ? '' : lang;
 
     header.innerHTML = `
-      <span class="font-mono text-xs font-medium uppercase text-neutral-500">${displayLang}</span>
-      <button class="copy-btn text-neutral-500 hover:text-white transition-colors cursor-pointer" aria-label="Copy code">
+      <div class="flex items-center gap-2">
+        ${displayLang ? `
+          <span class="font-mono text-[10px] tracking-widest font-bold uppercase text-neutral-500 bg-neutral-900 px-2 py-0.5 rounded border border-brand-border">
+            ${displayLang}
+          </span>
+        ` : ''}
+      </div>
+      <button class="copy-btn text-neutral-500 hover:text-white transition-colors cursor-pointer p-1" aria-label="Copy code">
         <i class="iconoir-copy text-sm copy-icon"></i>
         <i class="iconoir-check text-sm check-icon hidden! text-green-500"></i>
       </button>
     `;
 
-    // 3. Insert and clean up
     pre.parentNode?.insertBefore(wrapper, pre);
     wrapper.appendChild(header);
     wrapper.appendChild(pre);
+    pre.classList.add('bg-transparent!', 'm-0!', 'p-4', 'max-h-150', 'overflow-y-auto', 'overflow-x-auto');
 
-    // FIX: Update to v4 '!' suffix syntax
-    pre.classList.add('bg-transparent!', 'm-0!', 'p-4', 'overflow-x-auto');
-
-    // 4. Click Handler
     const btn = header.querySelector('.copy-btn');
     btn?.addEventListener('click', async () => {
         try {
@@ -41,7 +42,6 @@
             const copyIcon = btn.querySelector('.copy-icon');
             const checkIcon = btn.querySelector('.check-icon');
             
-            // Toggle the forced hidden class
             copyIcon?.classList.add('hidden!');
             checkIcon?.classList.remove('hidden!');
             

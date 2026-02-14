@@ -9,11 +9,11 @@ const posts = (await getCollection('writings')).sort(
 ---
 
 <BaseLayout pageTitle="Writings">
-  <div class="-mt-8 space-y-10">
-    <div class="grid gap-4">
+  <div class="space-y-15">
+    <div class="grid gap-8">
       {posts.map((post) => (
         <a href={`/writings/${post.slug}`} class="group block">
-          <article class="flex flex-col space-y-2">
+          <article class="flex flex-col space-y-4">
             <div class="flex-row lg:flex justify-between items-baseline">
               <h2 class="text-xl font-semibold text-neutral-200 group-hover:text-white group-hover:underline decoration-2 underline-offset-4 transition-all">
                 {post.data.title}

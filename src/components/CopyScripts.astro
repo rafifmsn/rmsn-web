@@ -6,7 +6,7 @@
     wrapper.className = 'relative my-8 rounded-lg border border-brand-border bg-[#111] overflow-hidden group';
     
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between border-b border-brand-border bg-[#1a1a1a] px-4 py-2';
+    header.className = 'flex items-center justify-between border-b border-brand-border bg-[#1a1a1a] px-4';
     
     const lang = pre.getAttribute('data-language') || '';
 
@@ -17,7 +17,7 @@
     header.innerHTML = `
       <div class="flex items-center gap-2">
         ${displayLang ? `
-          <span class="font-mono text-[10px] tracking-widest font-bold uppercase text-neutral-500 bg-neutral-900 px-2 py-0.5 rounded border border-brand-border">
+          <span class="font-mono text-[10px] tracking-widest font-bold uppercase">
             ${displayLang}
           </span>
         ` : ''}
@@ -31,7 +31,7 @@
     pre.parentNode?.insertBefore(wrapper, pre);
     wrapper.appendChild(header);
     wrapper.appendChild(pre);
-    pre.classList.add('bg-transparent!', 'm-0!', 'p-4', 'max-h-150', 'overflow-y-auto', 'overflow-x-auto');
+    pre.classList.add('bg-transparent!', 'm-0!', 'p-4', 'max-h-150', 'overflow-auto');
 
     const btn = header.querySelector('.copy-btn');
     btn?.addEventListener('click', async () => {

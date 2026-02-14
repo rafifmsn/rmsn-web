@@ -28,19 +28,22 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #404040;
   }
+
+  ::-webkit-scrollbar-corner {
+    background: #111111;
+  }
   
   html {
     font-size: 14px;
     font-family: var(--font-sans);
     -webkit-antialiased: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
   }
 
   .lock-screen {
     overflow: hidden !important;
     height: 100% !important;
-    position: fixed !important; /* The 'nuclear option' for iOS */
+    position: fixed !important;
     width: 100% !important;
   }
 }

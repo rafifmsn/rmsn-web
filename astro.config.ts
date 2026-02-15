@@ -7,6 +7,10 @@ import rehypeKatex from 'rehype-katex';
 export default defineConfig({
   site: 'https://rafifmsn.com',
   integrations: [sitemap()],
+  trailingSlash: 'never',
+  build: {
+    format: 'file'
+  },
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],

@@ -7,7 +7,9 @@ summary: "A comparative study proving that DenseNet-121’s local feature extrac
 ## 1. Introduction
 
 ### 1.1 The Challenge of Computer
-Chest X-ray examinations are among the most frequent and cost-effective medical imaging procedures available today. However, interpreting them is far from simple; clinical diagnosis from a chest X-ray can sometimes be more difficult than diagnosis via chest CT imaging. For years, the development of clinically relevant Computer-Aided Detection and Diagnosis (CAD) systems has been stalled by a single, major hurdle: data. Deep learning models require massive amounts of annotated data, but in the medical field, resources for labeling thousands of images are scarce.
+Chest X-ray examinations are among the most frequent and cost-effective medical imaging procedures available today. However, interpreting them is far from simple; clinical diagnosis from a chest X-ray can sometimes be more difficult than diagnosis via chest CT imaging.
+
+For years, the development of clinically relevant Computer-Aided Detection and Diagnosis (CAD) systems has been stalled by a single, major hurdle: data. Deep learning models require massive amounts of annotated data, but in the medical field, resources for labeling thousands of images are scarce.
 
 ### 1.2 Motivation: The Data Imbalance Problem
 The release of the NIH Chest X-ray Dataset, comprising over 112,120 images, significantly changed this landscape. However, real-world medical data brings real-world problems. For this experiment, a 5% random sample (5,606 images) was used to simulate a constrained data environment.

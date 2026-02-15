@@ -1,10 +1,11 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostHeader from '../../components/PostHeader.astro';
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('writings');
-  return blogEntries.map((entry: CollectionEntry<'writings'>) => ({
+  const writingEntries = await getCollection('writings');
+  return writingEntries.map((entry: CollectionEntry<'writings'>) => ({
     params: { slug: entry.slug }, 
     props: { entry }
   }));
@@ -16,15 +17,7 @@ const { Content } = await entry.render();
 
 <BaseLayout pageTitle={entry.data.title} pageDescription={entry.data.summary || entry.data.title}>
   <article class="prose prose-invert prose-neutral max-w-none">
-    <header class="mb-12 border-b border-neutral-800 pb-8">
-      <h1 class="text-2xl font-bold text-white mb-2">{entry.data.title}</h1>
-      {entry.data.date && (
-        <p class="text-neutral-500 text-base mt-4 italic">
-          {entry.data.date}
-        </p>
-      )}
-    </header>
-    
+    <PostHeader title={entry.data.title} subtitle={entry.data.date} />
     <Content />
   </article>
 </BaseLayout>

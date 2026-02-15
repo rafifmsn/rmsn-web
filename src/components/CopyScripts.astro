@@ -1,51 +1,57 @@
-<script is:inline type="module">
+<script is:inline>
   const codeBlocks = document.querySelectorAll('pre');
 
   codeBlocks.forEach((pre) => {
-    // 1. Create wrapper
     const wrapper = document.createElement('div');
-    wrapper.className = 'my-8 rounded-lg border border-neutral-800 bg-[#111] overflow-hidden group';
+    wrapper.className = 'relative my-8 rounded-lg border border-brand-border bg-[#111] overflow-hidden group';
     
-    // 2. Create Header
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between border-b border-neutral-800 bg-[#1a1a1a] px-4 py-2';
+    header.className = 'flex items-center justify-between border-b border-brand-border bg-[#1a1a1a] px-4';
     
-    // Get the attribute. If null, use an empty string.
     const lang = pre.getAttribute('data-language') || '';
 
-    // If the language is 'plaintext', we don't want to show that word.
-    // We only want to show it if it's a real language (python, js) or a custom name (main.py).
-    const displayLang = lang === 'plaintext' ? '' : lang;
+    // Logic: If it's plaintext or empty, it's a generic block. Hide the label.
+    const isPlaintext = lang === 'plaintext' || lang === '';
+    const displayLang = isPlaintext ? '' : lang;
 
     header.innerHTML = `
-      <span class="font-mono text-xs font-medium uppercase text-neutral-500">${displayLang}</span>
-      <button class="copy-btn text-neutral-500 hover:text-white transition-colors" aria-label="Copy code">
+      <div class="flex items-center gap-2">
+        ${displayLang ? `
+          <span class="font-mono text-[10px] tracking-widest font-bold uppercase">
+            ${displayLang}
+          </span>
+        ` : ''}
+      </div>
+      <button class="copy-btn text-neutral-500 hover:text-white transition-colors cursor-pointer p-1" aria-label="Copy code">
         <i class="iconoir-copy text-sm copy-icon"></i>
-        <i class="iconoir-check text-sm check-icon hidden text-green-500"></i>
+        <i class="iconoir-check text-sm check-icon hidden! text-green-500"></i>
       </button>
     `;
 
-    // 3. Insert and clean up
     pre.parentNode?.insertBefore(wrapper, pre);
     wrapper.appendChild(header);
     wrapper.appendChild(pre);
+    pre.classList.add('bg-transparent!', 'm-0!', 'p-4', 'max-h-150', 'overflow-auto');
 
-    pre.classList.add('!m-0', '!bg-transparent', 'p-4', 'overflow-x-auto');
-
-    // 4. Click Handler (Same as before)
     const btn = header.querySelector('.copy-btn');
     btn?.addEventListener('click', async () => {
-        const codeText = pre.innerText;
-        await navigator.clipboard.writeText(codeText);
-        
-        const copyIcon = btn.querySelector('.copy-icon');
-        const checkIcon = btn.querySelector('.check-icon');
-        copyIcon?.classList.add('hidden');
-        checkIcon?.classList.remove('hidden');
-        setTimeout(() => {
-            copyIcon?.classList.remove('hidden');
-            checkIcon?.classList.add('hidden');
-        }, 2000);
+        try {
+            const codeText = pre.innerText;
+            await navigator.clipboard.writeText(codeText);
+            
+            const copyIcon = btn.querySelector('.copy-icon');
+            const checkIcon = btn.querySelector('.check-icon');
+            
+            copyIcon?.classList.add('hidden!');
+            checkIcon?.classList.remove('hidden!');
+            
+            setTimeout(() => {
+                copyIcon?.classList.remove('hidden!');
+                checkIcon?.classList.add('hidden!');
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy!', err);
+        }
     });
   });
 </script>

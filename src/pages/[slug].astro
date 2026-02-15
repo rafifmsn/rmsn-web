@@ -4,8 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostHeader from '../components/PostHeader.astro';
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('pages');
-  return blogEntries.map((entry: CollectionEntry<"pages">) => ({
+  const pageEntries = await getCollection('pages');
+  return pageEntries.map((entry: CollectionEntry<"pages">) => ({
     params: { slug: entry.slug }, props: { entry },
   }));
 }

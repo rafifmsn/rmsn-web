@@ -34,10 +34,10 @@
   }
   
   html {
-    font-size: 14px;
     font-family: var(--font-sans);
     -webkit-antialiased: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    @apply text-[14px] md:text-base
   }
 
   .lock-screen {

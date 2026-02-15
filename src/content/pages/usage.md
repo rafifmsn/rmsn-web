@@ -1,6 +1,6 @@
 ---
 title: "Usage Guidance"
-description: "A brief examples of features provided on this template."
+description: "A brief examples of features provided."
 ---
 
 ## 1. Mathematical Equations

@@ -76,9 +76,9 @@ export function GlobalModals() {
 
         {/* --- CONTACT MODAL --- */}
         {activeModal === "contact" && (
-          <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} className="w-full max-w-2xl glass-card p-10 md:p-20 rounded-3xl text-center">
+          <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} className="w-full max-w-2xl glass-card p-5 md:p-20 rounded-3xl text-center">
             <h2 className="text-2xl md:text-5xl font-medium mb-6">Start the Conversation</h2>
-            <p className="text-white/60 font-light mb-8">Reach out for purchasing inquiries, partnership opportunities, or custom intelligence tailored to your market.</p>
+            <p className="text-white/60 font-light mb-8 text-balance">Reach out for purchasing inquiries, partnership opportunities, or custom intelligence tailored to your market.</p>
             <a href="https://s.id/rafifmsn" className="inline-block px-8 py-4 bg-white text-black rounded-full font-medium hover:scale-105 transition-transform">
               Get in Touch
             </a>

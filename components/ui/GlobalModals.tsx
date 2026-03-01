@@ -32,7 +32,7 @@ export function GlobalModals() {
           <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} className="w-full max-w-6xl max-h-[85vh] overflow-y-auto hide-scrollbar">
             <div className="text-center mb-12">
               <h3 className="text-3xl md:text-5xl font-medium mb-4">Structured Assets</h3>
-              <p className="text-white/60 font-light max-w-xl mx-auto">I research industries, decode business models, and map market entry paths into structured formats operators can actually use.</p>
+              <p className="text-white/60 font-light max-w-xl mx-auto text-balance">I research industries, decode business models, and map market entry paths into structured formats operators can actually use.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

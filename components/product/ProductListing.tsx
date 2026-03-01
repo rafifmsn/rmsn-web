@@ -101,8 +101,8 @@ export function ProductListing({ initialProducts }: { initialProducts: Product[]
         {filteredProducts.map((product) => (
           <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} key={product.slug}>
             <Link href={`/products/${product.slug}`} className="glass-card rounded-2xl overflow-hidden flex flex-col h-full group hover:bg-white/10 transition-colors">
-              <div className="relative aspect-4/3 overflow-hidden bg-zinc-900">
-                <img src={product.images?.[0] || "/og.png"} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <div className="relative aspect-video overflow-hidden bg-zinc-900">
+                <img src={product.images?.[0] || "/og.png"} alt={product.title} className="w-full aspect-video object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
                 <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 text-[10px] uppercase tracking-widest rounded-full border border-white/10">
                   {product.category}
                 </div>
@@ -114,7 +114,7 @@ export function ProductListing({ initialProducts }: { initialProducts: Product[]
                 </div>
                 <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
                   <span className="text-lg font-mono tracking-tight">${product.price}</span>
-                  <span className="text-sm opacity-0 group-hover:opacity-100 transition-opacity">View Details →</span>
+                  <span className="text-sm transition-opacity">View Details →</span>
                 </div>
               </div>
             </Link>

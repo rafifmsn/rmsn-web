@@ -1,26 +1,63 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: "DM Sans", sans-serif;
+  --font-serif: "Instrument Serif", serif;
+  
+  --color-glass-100: rgba(255, 255, 255, 0.03);
+  --color-glass-200: rgba(255, 255, 255, 0.08);
+  --color-glass-300: rgba(255, 255, 255, 0.12);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-[20px] border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  }
+  .glass-input {
+    @apply bg-black/20 border border-white/10 text-white transition-all duration-300 focus:outline-none focus:border-white/40 focus:bg-white/5;
+  }
+  .animated-underline {
+    @apply relative inline-block;
+  }
+  .animated-underline::after {
+    @apply content-[''] absolute w-full h-px bottom-0 left-0 bg-white origin-bottom-right scale-x-0 transition-transform duration-400 ease-[cubic-bezier(0.86,0,0.07,1)];
+  }
+  .animated-underline:hover::after {
+    @apply scale-x-100 origin-bottom-left;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Base resets */
+@layer base {
+  body {
+    @apply bg-black text-white selection:bg-white selection:text-black;
+  }
+  select {
+    color-scheme: dark;
+  }
+  option {
+    background-color: #121212; /* A deep zinc/black */
+    color: white;
+  }
+  .glass-select {
+    @apply appearance-none pr-10 cursor-pointer;
+    /* Custom arrow SVG so it looks the same on every OS */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.5)' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    body { cursor: none; }
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
 }

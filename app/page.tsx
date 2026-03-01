@@ -1,65 +1,73 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { Navbar } from "@/components/layout/Navbar";
+
+const revealVariants = {
+  hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    filter: "blur(0px)",
+    transition: { 
+      duration: 1.2, 
+      ease: [0.22, 1, 0.36, 1] as const
+    }
+  }
+} as const;
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="relative h-screen w-screen overflow-hidden flex flex-col justify-center items-center px-6 text-center">
+      <Navbar />
+      
+      {/* Background */}
+      <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-black/50 mix-blend-multiply z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.85)_100%)] z-10" />
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover grayscale-40 opacity-70">
+          <source src="/assets/bg.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      {/* Hero Content */}
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
+        className="relative z-20 max-w-4xl flex flex-col items-center"
+      >
+        <motion.h1 variants={revealVariants} className="text-5xl md:text-6xl lg:text-8xl font-medium tracking-tight mb-8 leading-[1.1]">
+          Stay informed,<br />
+          <span className="text-white/60 font-light">effortless.</span>
+        </motion.h1>
+        
+        <motion.p variants={revealVariants} className="text-lg md:text-xl font-light text-white/80 max-w-lg mb-12 leading-relaxed text-balance">
+          Structured market intelligence for decision makers, stripped of noise and optimized for execution.
+        </motion.p>
+
+        <motion.div variants={revealVariants}>
+          <Link href="https://app.rafifmsn.com" className="group flex items-center gap-4 sm:text-lg md:text-xl font-light hover-target">
+            <span className="animated-underline pb-1">Access the reports</span>
+            <span className="group-hover:translate-x-3 transition-transform duration-500 ease-out pb-1">→</span>
+          </Link>
+        </motion.div>
+      </motion.div>
+
+      {/* Footer Links */}
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={revealVariants}
+        className="absolute bottom-8 text-[10px] font-mono tracking-widest text-white/30 uppercase z-20"
+      >
+        <div className="flex gap-x-4">
+          <a href="https://x.com/rafifmsn" target="_blank" rel="noreferrer" className="hover:text-white transition-colors hover-target">Twitter</a>
+          <a href="https://github.com/rafifmsn" target="_blank" rel="noreferrer" className="hover:text-white transition-colors hover-target">Github</a>
+          <a href="https://linkedin.com/in/rafifmsn" target="_blank" rel="noreferrer" className="hover:text-white transition-colors hover-target">LinkedIn</a>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </motion.div>
+    </main>
   );
 }

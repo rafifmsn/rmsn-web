@@ -57,7 +57,6 @@ export function Navbar() {
               <Link href="?modal=reports" scroll={false}>Reports</Link>
               <Link href="?modal=about" scroll={false}>About</Link>
               <Link href="?modal=contact" scroll={false}>Contact</Link>
-              <button onClick={() => setIsOpen(false)} className="hover:text-white uppercase transition-colors">Contact</button>
             </div>
           </motion.div>
         )}
